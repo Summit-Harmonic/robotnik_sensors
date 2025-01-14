@@ -26,6 +26,7 @@
   <xacro:include filename="$(find robotnik_sensors)/urdf/3d_lidar/robosense_helios_16p.urdf.xacro" />
 
   <!-- IMUs -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/imu.urdf.xacro" />
   <xacro:include filename="$(find robotnik_sensors)/urdf/imu/vectornav.urdf.xacro" />
 
   <!-- GPS -->

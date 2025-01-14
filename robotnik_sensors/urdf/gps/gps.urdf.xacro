@@ -44,47 +44,13 @@
 	  </gazebo>
 
     <gazebo reference="${frame_prefix}base_link">
-      <sensor type="gps" name="${frame_prefix}sensor">
-        <always_on>true</always_on>
+      <sensor name="${frame_prefix}sensor" type="navsat">
+        <always_on>1</always_on>
         <update_rate>${update_rate}</update_rate>
-        <gps>
-          <position_sensing>
-            <horizontal>
-              <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>0.1</stddev>
-              </noise>
-            </horizontal>
-            <vertical>
-              <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>0.1</stddev>
-              </noise>
-            </vertical>
-          </position_sensing>
-          <vertical_sensing>
-            <horizontal>
-              <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>0.1</stddev>
-              </noise>
-            </horizontal>
-            <vertical>
-              <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>0.1</stddev>
-              </noise>
-            </vertical>
-          </vertical_sensing>
-        </gps>
-        <plugin name="${node_name}" filename="libgazebo_ros_gps_sensor.so">
-          <ros>
-            <namespace>${node_namespace}</namespace>
-            <remapping>~/out:=${topic_prefix}fix</remapping>
-            <remapping>~/vel:=${topic_prefix}vel</remapping>
-          </ros>
-        </plugin>
+        <topic>/robot/gps/fix</topic>
+        <gz_frame_id>${frame_prefix}base_link</gz_frame_id>
       </sensor>
-	  </gazebo>
+    </gazebo>
+
   </xacro:macro>
 </robot>

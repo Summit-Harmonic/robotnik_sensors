@@ -5,7 +5,7 @@
                        parent
                        *origin
                        model:=zed2
-                       simulation:=false
+                       simulation:=true
                        node_name:=stereolabs_generic
                        node_namespace:=${None}
                        topic_prefix:=~/
@@ -59,7 +59,7 @@
       </inertial>
     </link>
 
-   <!-- Left camera -->
+    <!-- Left camera -->
     <joint name="${frame_prefix}color_left_joint" type="fixed">
       <origin xyz="0.0 0.06 0.0" rpy="0.0 0.0 0.0" />
       <parent link="${frame_prefix}base_link" />
@@ -89,7 +89,7 @@
     </joint>
     <link name="${frame_prefix}right_camera_optical_frame"/>
 
-    <!-- Depth image-->
+    <!-- Depth Camera-->
     <joint name="${frame_prefix}depth_joint" type="fixed">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
       <parent link="${frame_prefix}base_link" />
@@ -104,114 +104,79 @@
     </joint>
     <link name="${frame_prefix}depth_optical_frame"/>
 
-    <xacro:if value="${simulation}">
-      <gazebo reference="${frame_prefix}right_camera_frame">
-        <sensor name="${frame_prefix}right_sensor" type="camera">
-          <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
-          <visualize>false</visualize>
-          <update_rate>30</update_rate>
-          <camera>
-            <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
-            <vertical_fov>${radians(float(vertical_fov))}</vertical_fov>
-            <image>
-              <width>${video_width}</width>
-              <height>${video_height}</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.10</near>
-              <far>100.0</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name="${node_name}_right" filename="libgazebo_ros_camera.so">
-            <ros>
-              <namespace>${node_namespace}/${node_name}</namespace>
-              <remapping>right/image_raw:=right/image_raw_color</remapping>
-              <remapping>right/camera_info:=right/camera_info</remapping>
-            </ros>
-            <camera_name>right</camera_name>
-            <frame_name>${node_namespace}/${frame_prefix}right_camera_optical_frame</frame_name>
-          </plugin>
-        </sensor>
-      </gazebo>
-      <gazebo reference="${frame_prefix}left_camera_frame">
-        <sensor name="${frame_prefix}left_sensor" type="camera">
-          <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
-          <visualize>false</visualize>
-          <update_rate>30</update_rate>
-          <camera>
-            <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
-            <vertical_fov>${radians(float(vertical_fov))}</vertical_fov>
-            <image>
-              <width>${video_width}</width>
-              <height>${video_height}</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.10</near>
-              <far>100.0</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name="${node_name}_left" filename="libgazebo_ros_camera.so">
-            <ros>
-              <namespace>${node_namespace}/${node_name}</namespace>
-              <remapping>left/image_raw:=left/image_raw_color</remapping>
-              <remapping>left/camera_info:=left/camera_info</remapping>
-            </ros>
-            <camera_name>left</camera_name>
-            <frame_name>${node_namespace}/${frame_prefix}left_camera_optical_frame</frame_name>
-          </plugin>
-        </sensor>
-      </gazebo>
-      <gazebo reference="${frame_prefix}depth_frame">
-        <sensor name="${frame_prefix}sensor" type="depth">
-          <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
-          <visualize>false</visualize>
-          <update_rate>30</update_rate>
-          <camera>
-            <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
-            <vertical_fov>${radians(float(vertical_fov))}</vertical_fov>
-            <image>
-              <width>${video_width}</width>
-              <height>${video_height}</height>
-              <format>B8G8R8</format>
-            </image>
-            <clip>
-              <near>0.05</near>
-              <far>100.0</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name="${node_name}" filename="libgazebo_ros_camera.so">
-            <ros>
-              <namespace>${node_namespace}</namespace>
-              <remapping>~/image_raw:=${topic_prefix}rgb/image_raw_color</remapping>
-              <remapping>~/camera_info:=${topic_prefix}rgb/camera_info</remapping>
-              <remapping>~/points:=${topic_prefix}point_cloud/cloud_registered</remapping>
-              <remapping>~/depth/camera_info:=${topic_prefix}depth/camera_info</remapping>
-              <remapping>~/depth/image_raw:=${topic_prefix}depth/depth_registered</remapping>
-            </ros>
-            <camera_name>${node_name}</camera_name>
-            <frame_name>${node_namespace}/${frame_prefix}depth_optical_frame</frame_name>
-            <min_depth>${min_depth}</min_depth>
-            <max_depth>${max_depth}</max_depth>
-          </plugin>
-        </sensor>
-      </gazebo>
-    </xacro:if>
+    <!-- Right Camera Gazebo Definition -->
+    <gazebo reference="${frame_prefix}right_camera_frame">
+      <sensor name="${frame_prefix}right_sensor" type="camera">
+        <visualize>true</visualize>
+        <update_rate>30</update_rate>
+        <topic>/${frame_prefix}right/image</topic>
+        <camera>
+          <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
+          <image>
+            <width>${video_width}</width>
+            <height>${video_height}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.10</near>
+            <far>15.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          <optical_frame_id>${frame_prefix}right_camera_frame</optical_frame_id>
+        </camera>
+      </sensor>
+    </gazebo>
+    <!-- Left Camera Gazebo Definition -->
+    <gazebo reference="${frame_prefix}left_camera_frame">
+      <sensor name="${frame_prefix}left_sensor" type="camera">
+        <visualize>false</visualize>
+        <update_rate>30</update_rate>
+        <topic>/${frame_prefix}left/image</topic>
+        <camera>
+          <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
+          <image>
+            <width>${video_width}</width>
+            <height>${video_height}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.10</near>
+            <far>15.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          <optical_frame_id>${frame_prefix}left_camera_frame</optical_frame_id>
+        </camera>
+      </sensor>
+    </gazebo>
+    <!-- Depth Camera Gazebo Definition -->
+    <gazebo reference="${frame_prefix}depth_frame">
+      <sensor name="rgbd_camera" type="rgbd_camera">
+        <camera>
+          <horizontal_fov>${radians(float(horizontal_fov))}</horizontal_fov>
+          <image>
+            <width>${video_width}</width>
+            <height>${video_height}</height>
+          </image>
+          <clip>
+            <near>${min_depth}</near>
+            <far>${max_depth}</far>
+          </clip>
+          <optical_frame_id>${frame_prefix}depth_frame</optical_frame_id>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>20</update_rate>
+        <visualize>true</visualize>
+        <topic>/${frame_prefix}depth_camera</topic>
+        <gz_frame_id>${frame_prefix}depth_frame</gz_frame_id>
+      </sensor>
+    </gazebo>
   </xacro:macro>
 </robot>

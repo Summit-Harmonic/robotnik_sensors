@@ -42,15 +42,15 @@
     <link name="${frame_prefix}link"/>
     <xacro:if value="${simulation}">
       <xacro:if value="${gpu}">
-        <xacro:property name="ray_type" value="gpu_ray" />
+        <xacro:property name="ray_type" value="gpu_lidar" />
       </xacro:if>
       <xacro:unless value="${gpu}">
-        <xacro:property name="ray_type" value="ray" />
+        <xacro:property name="ray_type" value="lidar" />
       </xacro:unless>
       <gazebo reference="${frame_prefix}link">
         <sensor type="${ray_type}" name="${frame_prefix}sensor">
           <pose>0 0 0 0 0 0</pose>
-          <visualize>false</visualize>
+          <visualize>true</visualize>
           <update_rate>10</update_rate>
           <ray>
             <scan>
@@ -78,16 +78,6 @@
               <stddev>0.00</stddev>
             </noise>
           </ray>
-          <plugin name="${node_name}" filename="libgazebo_ros_velodyne_laser.so">
-            <ros>
-              <namespace>${node_namespace}</namespace>
-            </ros>
-            <topicName>~/point_cloud</topicName>
-            <frameName>${node_namespace}/${frame_prefix}link</frameName>
-            <min_range>0.05</min_range>
-            <max_range>100.0</max_range>
-            <gaussianNoise>0.01</gaussianNoise>
-          </plugin>
         </sensor>
       </gazebo>
     </xacro:if>

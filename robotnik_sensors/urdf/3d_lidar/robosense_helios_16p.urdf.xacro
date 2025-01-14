@@ -4,7 +4,7 @@
                params="frame_prefix
                        parent
                        *origin
-                       simulation:=false
+                       simulation:=true
                        node_name:=robosense_helios
                        node_namespace:=${None}
                        topic_prefix:=~/
@@ -43,56 +43,35 @@
       <origin xyz="0.0 0 0.0635" rpy="0 0 0"/>
     </joint>
     <link name="${frame_prefix}link"/>
-    <xacro:if value="${simulation}">
-      <xacro:if value="${gpu}">
-        <xacro:property name="ray_type" value="gpu_ray" />
-      </xacro:if>
-      <xacro:unless value="${gpu}">
-        <xacro:property name="ray_type" value="ray" />
-      </xacro:unless>
       <gazebo reference="${frame_prefix}link">
-        <sensor type="${ray_type}" name="${frame_prefix}sensor">
-          <pose>0 0 0 0 0 0</pose>
-          <visualize>false</visualize>
-          <update_rate>10</update_rate>
-          <ray>
+        <sensor name='gpu_lidar' type='gpu_lidar'>
+          <pose relative_to='${frame_prefix}link'>0 0 0 0 0 0</pose>
+          <topic>${frame_prefix}sensor</topic>
+          <update_rate>20</update_rate>
+          <gz_frame_id>${frame_prefix}link</gz_frame_id>
+          <lidar>
             <scan>
               <horizontal>
-                <samples>1200</samples>
-                <resolution>1.0</resolution>
-                <min_angle>${-radians(180)}</min_angle>
-                <max_angle>${radians(180)}</max_angle>
+                <samples>450</samples> <!-- 900 -->
+                <resolution>1</resolution>
+                <min_angle>-3.141592</min_angle>
+                <max_angle>3.141592</max_angle>
               </horizontal>
               <vertical>
-                <samples>32</samples>
-                <resolution>1.0</resolution>
-                <min_angle>0.0</min_angle>
-                <max_angle>${radians(85)}</max_angle>
+                <samples>16</samples>
+                <resolution>1</resolution>
+                <min_angle>-0.261799</min_angle>
+                <max_angle>0.261799</max_angle>
               </vertical>
             </scan>
             <range>
-              <min>0.10</min>
-              <max>50</max>
-              <resolution>0.001</resolution>
+              <min>0.2</min>
+              <max>90.0</max>
+              <resolution>0.02</resolution>
             </range>
-            <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.00</stddev>
-            </noise>
-          </ray>
-          <plugin name="${node_name}" filename="libgazebo_ros_velodyne_laser.so">
-            <ros>
-              <namespace>${node_namespace}</namespace>
-            </ros>
-            <topicName>~/point_cloud</topicName>
-            <frameName>${node_namespace}/${frame_prefix}link</frameName>
-            <min_range>0.05</min_range>
-            <max_range>100.0</max_range>
-            <gaussianNoise>0.01</gaussianNoise>
-          </plugin>
+          </lidar>
+          <visualize>true</visualize>
         </sensor>
       </gazebo>
-    </xacro:if>
   </xacro:macro>
 </robot>
