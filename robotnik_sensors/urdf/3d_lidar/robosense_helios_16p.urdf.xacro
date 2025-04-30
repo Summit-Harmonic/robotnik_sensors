@@ -49,10 +49,10 @@
           <topic>${frame_prefix}sensor</topic>
           <update_rate>20</update_rate>
           <gz_frame_id>${frame_prefix}link</gz_frame_id>
-          <lidar>
+          <ray>
             <scan>
               <horizontal>
-                <samples>450</samples> <!-- 900 -->
+                <samples>1200</samples> <!-- 900 -->
                 <resolution>1</resolution>
                 <min_angle>-3.141592</min_angle>
                 <max_angle>3.141592</max_angle>
@@ -67,9 +67,9 @@
             <range>
               <min>0.2</min>
               <max>90.0</max>
-              <resolution>0.02</resolution>
+              <resolution>0.01</resolution>
             </range>
-          </lidar>
+          </ray>
           <visualize>true</visualize>
         </sensor>
       </gazebo>
