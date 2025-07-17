@@ -10,12 +10,12 @@
                        topic_prefix:=~/
                        gpu:=true">
 
-    <joint name="${frame_prefix}base_joint" type="fixed">
+    <joint name="${frame_prefix}_base_joint" type="fixed">
       <xacro:insert_block name="origin" />
       <parent link="${parent}"/>
-      <child link="${frame_prefix}base_link"/>
+      <child link="${frame_prefix}_base_link"/>
     </joint>
-    <link name="${frame_prefix}base_link">
+    <link name="${frame_prefix}_base_link">
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -37,18 +37,18 @@
 		<xacro:solid_cuboid_inertia m="0.840" w="0.109" h="0.109" d="0.0827" />
       </inertial>
     </link>
-    <joint name="${frame_prefix}joint" type="fixed">
-      <parent link="${frame_prefix}base_link"/>
-      <child link="${frame_prefix}link"/>
+    <joint name="${frame_prefix}_joint" type="fixed">
+      <parent link="${frame_prefix}_base_link"/>
+      <child link="${frame_prefix}_link"/>
       <origin xyz="0.0 0 0.0635" rpy="0 0 0"/>
     </joint>
-    <link name="${frame_prefix}link"/>
-      <gazebo reference="${frame_prefix}link">
+    <link name="${frame_prefix}_link"/>
+      <gazebo reference="${frame_prefix}_link">
         <sensor name='gpu_lidar' type='gpu_lidar'>
-          <pose relative_to='${frame_prefix}link'>0 0 0 0 0 0</pose>
-          <topic>${frame_prefix}sensor</topic>
+          <pose relative_to='${frame_prefix}_link'>0 0 0 0 0 0</pose>
+          <topic>${frame_prefix}</topic>
           <update_rate>20</update_rate>
-          <gz_frame_id>${frame_prefix}link</gz_frame_id>
+          <gz_frame_id>${frame_prefix}_link</gz_frame_id>
           <ray>
             <scan>
               <horizontal>

@@ -18,12 +18,13 @@
                                      topic_prefix="${topic_prefix}"
                                      horizontal_fov="110"
                                      vertical_fov="70"
-                                     video_width="960"
-                                     video_height="540"
+                                     video_width="640" 
+                                     video_height="360"
                                      video_fps="30"
                                      min_depth="0.2"
                                      max_depth="20.0">
       <xacro:insert_block name="origin" />
+      <!-- 960 x 540 -->
     </xacro:sensor_stereolabs_generic>
   </xacro:macro>
 </robot>
