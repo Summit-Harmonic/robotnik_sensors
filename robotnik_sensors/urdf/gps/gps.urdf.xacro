@@ -13,9 +13,9 @@
 	  <joint name="${frame_prefix}joint" type="fixed">
 	    <xacro:insert_block name="origin"/>
 	    <parent link="${parent}"/>
-	    <child link="${frame_prefix}base_link"/>
+	    <child link="${frame_prefix}link"/>
 	  </joint>
-	  <link name="${frame_prefix}base_link">
+	  <link name="${frame_prefix}link">
       <inertial>
         <origin xyz="0.0 0 0.015" rpy="0 0 0" />
         <mass value="0.2" />
@@ -38,17 +38,17 @@
 	    </collision>
 	  </link>
 
-	  <gazebo reference="${frame_prefix}base_link">
+	  <gazebo reference="${frame_prefix}link">
 	    <material>Gazebo/White</material>
 	    <gravity>true</gravity>
 	  </gazebo>
 
-    <gazebo reference="${frame_prefix}base_link">
+    <gazebo reference="${frame_prefix}link">
       <sensor name="${frame_prefix}sensor" type="navsat">
         <always_on>1</always_on>
         <update_rate>${update_rate}</update_rate>
         <topic>gps/fix</topic>
-        <gz_frame_id>${frame_prefix}base_link</gz_frame_id>
+        <gz_frame_id>${frame_prefix}link</gz_frame_id>
       </sensor>
     </gazebo>
 

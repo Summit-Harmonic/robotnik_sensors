@@ -24,6 +24,13 @@
 	      </visual>
 	  </link>
 
+    <joint name="${prefix}_gazebo_frame_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}_link"/>
+      <child link="summit_xl/base_footprint/imu_sensor"/>
+    </joint>
+    <link name="summit_xl/base_footprint/imu_sensor"/>
+
     <gazebo reference="${prefix}_link">
       <sensor name="${prefix}_sensor" type="imu">
         <always_on>1</always_on>
